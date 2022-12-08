@@ -1,7 +1,7 @@
 ```asm
 _start:
 	incr x0
-	jump_eq 0x, 0x3E8, kill
+	jump_eq x0, 0x3E8, kill
 	nop
 	jump _start
 	
