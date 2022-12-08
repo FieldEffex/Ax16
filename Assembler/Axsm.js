@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const args = process.argv.slice(2);
+const bitDev = require("./BitDev.js");
 
 const indent = "\t";
 
@@ -100,4 +101,67 @@ for (let i = 0; i < ast.length; i++)
         i--;
     }
 
-console.log(ast);
+const flags = {};
+let bits = 8;
+
+ast.forEach((node) => {
+    if (node.type == "flag") {
+        flags[node.flag] = node.value;
+    }
+});
+
+// Set bits
+if (flags.bits) {
+    bits = parseInt(flags.bits);
+    if (bits < 8) {
+        console.log("Bits must be atleast 8");
+        process.exit(1);
+    }
+
+    // check multiple
+    if (bits % 8 != 0) {
+        console.log("Bits must be a multiple of 8");
+        process.exit(1);
+    }
+}
+
+// remove all flags
+for (let i = 0; i < ast.length; i++)
+    if (ast[i].type == "flag") {
+        ast.splice(i, 1);
+        i--;
+    }
+
+ast.forEach((node) => {
+    const bitsList = [];
+    for (let b = 0; b < bits; b++)
+        bitsList.push(0);
+
+    bitDev.execute(bitsList, bits, node);
+        
+    const bytes = [];
+    // take 8 bit chunks and convert them to base 10 numbers and add to bytes
+    for (let i = 0; i < bitsList.length; i += 8) {
+        const bits = bitsList.slice(i, i + 8);
+        bytes.push(parseInt(bits.join(""), 2));
+    }
+
+    // reverse bytes
+    bytes.reverse();
+
+    // add to binary output
+    bytes.forEach((byte) => binaryOutput.push(byte));
+});
+
+console.log("Assembled program successfully");
+console.log("-- Bytes: " + Buffer.from(binaryOutput).length);
+console.log("-- Bits: " + Buffer.from(binaryOutput).length * 8);
+console.log("-- Segments: " + Buffer.from(binaryOutput).length / (bits / 8));
+console.log("");
+console.log("Assembler data:");
+console.log("-- Bits: " + bits);
+console.log("-- Instructions: " + ast.length);
+
+// Write file to directry where axsm file exists, but this time without extension
+const filename = args[0].replace(new RegExp(".axsm", "g"), "");
+fs.writeFileSync(path.join(process.cwd(), filename), Buffer.from(binaryOutput));

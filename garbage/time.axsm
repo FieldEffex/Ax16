@@ -1,4 +1,4 @@
-bits 16
+bits 8
 
 _start:
 	incr x0
@@ -7,4 +7,4 @@ _start:
 	jump _start
 
 kill:
-	nop
+	hlt

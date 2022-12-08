@@ -8,7 +8,7 @@ _start:
 	jump _start
 	
 kill:
-	nop
+	hlt
 ```
 
 The above program will excute in the following patteren.
