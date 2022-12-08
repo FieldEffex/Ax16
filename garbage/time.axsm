@@ -1,0 +1,10 @@
+bits 16
+
+_start:
+	incr x0
+	jump_eq x0 0x3E8 kill
+	nop
+	jump _start
+
+kill:
+	nop

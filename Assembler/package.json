@@ -1,0 +1,7 @@
+{
+    "name": "ax77-assembler",
+    "description": "This command line tool is designed to input Ax77 assembly files, and output binaries",
+    "bin": {
+        "axsm": "./Axsm.js"
+    }
+}

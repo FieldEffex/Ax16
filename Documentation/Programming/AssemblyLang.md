@@ -1,4 +1,6 @@
-```asm
+```axsm
+bits 16
+
 _start:
 	incr x0
 	jump_eq x0, 0x3E8, kill
@@ -10,6 +12,7 @@ kill:
 ```
 
 The above program will excute in the following patteren.
+ - Set the architech mode to 16 bits
  - First the CPU will find the address of `_start` which is `0x00` and will start executing it.
  - Inside it will increment the value in the `x0` register so that the value inside of `0x1`.
  - Then the CPU will check to see if the value in the `x0` register is equal to `0x3E8` which means 1000, it will not jump.
