@@ -1,7 +1,4 @@
 bits 16
 
 _start:
-	noop
-	jump death
-death:
-	halt
+	move @8A, 0x05
