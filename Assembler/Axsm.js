@@ -102,7 +102,7 @@ for (let i = 0; i < ast.length; i++)
     }
 
 const flags = {};
-let bits = 8;
+let bits = 16;
 
 ast.forEach((node) => {
     if (node.type == "flag") {
@@ -113,8 +113,8 @@ ast.forEach((node) => {
 // Set bits
 if (flags.bits) {
     bits = parseInt(flags.bits);
-    if (bits < 8) {
-        console.log("Bits must be atleast 8");
+    if (bits < 16) {
+        console.log("Bits must be atleast 16");
         process.exit(1);
     }
 
@@ -134,10 +134,7 @@ for (let i = 0; i < ast.length; i++)
 
 ast.forEach((node) => {
     const bitsList = [];
-    for (let b = 0; b < bits; b++)
-        bitsList.push(0);
-
-    bitDev.execute(bitsList, bits, node);
+    bitDev.execute({l: bitsList}, bits, node);
         
     const bytes = [];
     // take 8 bit chunks and convert them to base 10 numbers and add to bytes
@@ -145,9 +142,6 @@ ast.forEach((node) => {
         const bits = bitsList.slice(i, i + 8);
         bytes.push(parseInt(bits.join(""), 2));
     }
-
-    // reverse bytes
-    bytes.reverse();
 
     // add to binary output
     bytes.forEach((byte) => binaryOutput.push(byte));
