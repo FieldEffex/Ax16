@@ -134,7 +134,7 @@ for (let i = 0; i < ast.length; i++)
 
 ast.forEach((node) => {
     const bitsList = [];
-    bitDev.execute({l: bitsList}, bits, node);
+    bitDev.execute({l: bitsList}, bits, node, ast);
         
     const bytes = [];
     // take 8 bit chunks and convert them to base 10 numbers and add to bytes

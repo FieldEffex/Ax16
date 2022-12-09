@@ -40,29 +40,64 @@ function getDataHex(hex, bitGuard = 16) {
     };
 }
 
-exports.execute = (l, bits, node) => {
+exports.execute = (l, bits, node, ast) => {
     const code = node.instruction.replace(new RegExp("\t", "g"), "");
     const param = node.params.map((param) => param.param);
     
     if (bits == 16) {
-        if (code == "nop") {
+        if (code == "noop") {
             inlay(l, "0000000000000000");
         } 
-        else if (code == "jump") {
+        else if (code == "halt") {
             inlay(l, "0000000000000001");
+        }
+        else if (code == "jump") {
+            inlay(l, "0000000000000010");
             
             if (param.length != 1) {
                 console.log("Error: Invalid number of parameters for instruction: " + code);
+                console.log("-- Expected 1, got " + param.length)
                 process.exit(1);
             }
 
-            const data = getDataHex(param[0]);
-            if (data.bits > bits) {
-                console.log("Error: Invalid parameter for instruction: " + code);
-                process.exit(1);
-            }
+            if (param[0].startsWith("0x")) {
+                const data = getDataHex(param[0]);
+                if (data.bits > bits) {
+                    console.log("Error: Invalid parameter for instruction: " + code);
+                    console.log("-- Expected " + bits + " bits, got " + data.bits);
+                    process.exit(1);
+                }
 
-            inlay(l, data.guard);
+                inlay(l, data.guard);
+            } else {
+                // This is calling a function, we must check to see if the function even exists
+                let firstInstruction = ast.find((node) => node.label == param[0]);
+                if (!firstInstruction) {
+                    console.log("Error: Invalid parameter for instruction: " + code);
+                    console.log("-- Function " + param[0] + " might exist but it was not in the AST");
+                    process.exit(1);
+                }
+
+                // Now lets get the index of the first instruction
+                let firstInstructionIndex = ast.indexOf(firstInstruction);
+
+                // Due to parameters also having their own address plus the fact that the AST doesnt directly include the params and insets them inside the nodes, we have to add an offset with an algorithm loop
+                let offsetDueToParams = 0;
+                for (let i = 0; i < firstInstructionIndex; i++) {
+                    const node = ast[i];
+                    if (node.params) {
+                        offsetDueToParams += node.params.length;
+                    }
+                }
+
+                firstInstructionIndex += offsetDueToParams;
+
+                // Transform index into binary
+                const firstInstructionIndexAsBinary = firstInstructionIndex.toString(2);
+                const firstInstructionIndexAsBinaryWithPadding = "0000000000000000".substr(firstInstructionIndexAsBinary.length) + firstInstructionIndexAsBinary;
+
+                inlay(l, firstInstructionIndexAsBinaryWithPadding);
+            }
         }
         else {
             console.log("Error: Unsupported instruction: " + code);

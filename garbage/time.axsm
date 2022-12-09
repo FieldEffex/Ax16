@@ -1,6 +1,7 @@
 bits 16
 
 _start:
-	nop
-	jump 0xFF
-	jump 0x0888
+	noop
+	jump death
+death:
+	halt

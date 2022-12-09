@@ -1,4 +1,5 @@
-| Identity | Code    | Left    | Right   | Operand  | Description                                                                                                      |
-| -------- | ------- | ------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| 0        | NOP     |         |         |          | This instruction is used to waste time in a CPU, it costs the time of a single instruction.                      |
-| 1        | JUMP    |         |         | ADDRESS  | This instruction will allow you to move the program counter and start executing instructions from a new address. |   
+| Identity | Code    | Left    | Right   | Operand  | Description                                                                                                                                                                          |
+| -------- | ------- | ------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0        | NOOP    |         |         |          | This instruction is used to waste time in a CPU, it costs the time of a single instruction.                                                                                          |
+| 1        | HALT    |         |         |          | This instruction will trigger the CPU to terminate the program. Since the only boot program here is the kernel, the CPU will dislatch the power supply unit to shut down the device. |
+| 2        | JUMP    |         |         | ADDRESS  | This instruction will allow you to move the program counter and start executing instructions from a new address.                                                                     |   
