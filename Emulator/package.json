@@ -1,0 +1,6 @@
+{
+    "name": "ax77-emulator",
+    "bin": {
+        "axvm": "./Axvm.js"
+    }
+}

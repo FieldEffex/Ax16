@@ -1,4 +1,6 @@
-bits 32
+bits 16
 
 _start:
-	move @FF, 0x05
+	move_v @FF, 0xF0
+	move_v @01, 0x01
+	move_r @01, @FF
