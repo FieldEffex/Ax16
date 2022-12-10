@@ -6,52 +6,65 @@
  * @author @xlangk
  * @library This arithmetic cell is part of the FieldEffex Pre Bootstrapped Compiler Utils, written
  * in NodeJS runtime language.
- * @param {string} from
- * @param {string} sub
+ * @param {string} a
+ * @param {string} b
  */
-module.exports = function advancedInfinitySubtractor(from = "1", sub = "1") {
-    let cary = 0;
-
-    from = from.replace(/ /g, "").replace(/,/g, "");
-    sub = sub.replace(/ /g, "").replace(/,/g, "");
+module.exports = function advancedInfinitySubtractor(a = "1", b = "1") {
+    a = a.replace(/ /g, "").replace(/,/g, "");
+    b = b.replace(/ /g, "").replace(/,/g, "");
 
     const top = [];
     const bottom = [];
-    const sum = [];
+    const out = [];
 
-    const longest = from.length > sub.length ? from : sub;
-    const other = from.length > sub.length ? sub : from;
+    let negative = false;
 
-    for (let i = 0; i < longest.length; i++) {
-        top.push(longest[i]);
+    if (b.length > a.length) {
+        const temp = a;
+        a = b;
+        b = temp;
+        negative = true;
     }
 
-    for (let i = 0; i < longest.length - other.length; i++) {
+    for (let i = 0; i < a.length; i++)
+        top.push(a[i]);
+    for (let i = 0; i < a.length - b.length; i++)
         bottom.push("0");
-    }
+    for (let i = 0; i < b.length; i++)
+        bottom.push(b[i]);
 
-    for (let i = 0; i < other.length; i++) {
-        bottom.push(other[i]);
-    }
+    for (let i = bottom.length - 1; i >= 0; i--) {
+        let diff = parseInt(top[i]) - parseInt(bottom[i]);
 
-    for (let i = top.length - 1; i >= 0; i--) {
-        const rowSum = (parseInt(top[i]) - parseInt(bottom[i]) - cary).toString();
-        let rowSumWithoutCary;
-        
-        if (rowSum.length > 1) {
-            cary = parseInt(rowSum[0]);
-            rowSumWithoutCary = rowSum[1];
-        } else {
-            cary = 0;
-            rowSumWithoutCary = rowSum;
+        if (diff < 0) {
+            diff += 10;
+            top[i - 1] = (parseInt(top[i - 1]) - 1).toString();
         }
 
-        sum.push(rowSumWithoutCary);
+        out.push(diff);
     }
 
-    if (cary > 0) {
-        sum.push(cary);
+    let foundBit = false;
+    for (let i = out.length; i >= 0; i--) {
+        if (out[i] != 0)
+            foundBit = true;
+        if (!foundBit)
+            out.splice(i, 1);
     }
 
-    return sum.reverse().join("");
+    if (negative)
+        out.push("-");
+    
+    let str = out.reverse().join("");
+
+    let allZero = true;
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] != "0")
+            allZero = false;
+    }
+
+    if (allZero)
+        return "0";
+
+    return str.length == 0 ? "0" : str;
 }

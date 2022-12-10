@@ -5,6 +5,7 @@ const path = require("path");
 const advancedInfinityAdder = require("../Arithmetic/Adder.js");
 const advancedInfinityMultiplier = require("../Arithmetic/Multiply.js");
 const advancedInfinitySubtractor = require("../Arithmetic/Subtract.js");
+const advancedInfinityExponentiator = require("../Arithmetic/Exponent.js");
 
 const args = process.argv.slice(2);
 
@@ -197,4 +198,5 @@ console.log("");
 console.log("Post emulation");
 console.log("-- End address: %s", programCounter);
 
-console.log(advancedInfinityMultiplier("1238123", "2"));
+console.log(advancedInfinityExponentiator("2", "64"));
+// console.log(advancedInfinitySubtractor("1", "1"));
