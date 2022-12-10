@@ -105,7 +105,7 @@ for (let i = 0; i < registersCount; i++) {
     const id = i.toString(2);
     const idWithBinaryPropper = "0".repeat(bitsValue).substring(id.length) + id;
 
-    registers[idWithBinaryPropper] = idWithBinaryPropper;
+    registers[idWithBinaryPropper] = "0".repeat(bitsValue);
 }
 
 // Build ram
@@ -167,6 +167,8 @@ console.log("-- Disk (Bytes): " + (disk.length * bitsValue / 8));
 console.log("-- Boot sector used %d%s of ram", (bootInstructions / maxRamAddresses) * 100, "%");
 console.log("");
 
+console.table(registers);
+
 while (true) {
     const data = ram[programCounter];
     const address = programCounter;        
@@ -178,6 +180,50 @@ while (true) {
         console.log("HALT CALL:");
         console.log("-- Virtual Machine Termination Call, from [PROGRAM] at address " + address);
         break;
+    }
+    else if (toIns(data) == 2) {
+        // JUMP
+        const jumpAddress = ram[toBinary(fromBinary(address) + 1)];
+        programCounter = jumpAddress;
+        continue;
+    }
+    else if (toIns(data) == 3) {
+        // MOVE_V
+        const register = ram[toBinary(fromBinary(address) + 1)];
+        const value = ram[toBinary(fromBinary(address) + 2)];
+
+        registers[register] = value;
+
+        programCounter = toBinary(fromBinary(programCounter) + 2);
+    }
+    else if (toIns(data) == 4) {
+        // MOVE_R
+        const register1 = ram[toBinary(fromBinary(address) + 1)];
+        const register2 = ram[toBinary(fromBinary(address) + 2)];
+
+        registers[register1] = registers[register2];
+
+        programCounter = toBinary(fromBinary(programCounter) + 2);
+    }
+    else if (toIns(data) == 5) {
+        // ADD_V
+        const register = ram[toBinary(fromBinary(address) + 1)];
+        const value = ram[toBinary(fromBinary(address) + 2)];
+        const resultRegister = ram[toBinary(fromBinary(address) + 3)];
+
+        registers[resultRegister] = toBinary(advancedInfinityAdder(fromBinary(registers[register]), fromBinary(value)));
+
+        programCounter = toBinary(fromBinary(programCounter) + 3);
+    }
+    else if (toIns(data) == 6) {
+        // ADD_R
+        const register1 = ram[toBinary(fromBinary(address) + 1)];
+        const register2 = ram[toBinary(fromBinary(address) + 2)];
+        const resultRegister = ram[toBinary(fromBinary(address) + 3)];
+
+        registers[resultRegister] = toBinary(+advancedInfinityAdder(fromBinary(registers[register1]), fromBinary(registers[register2])));
+
+        programCounter = toBinary(fromBinary(programCounter) + 3);
     }
     else {
         console.log("UNKNOWN INSTRUCTION:");
@@ -197,6 +243,6 @@ while (true) {
 console.log("");
 console.log("Post emulation");
 console.log("-- End address: %s", programCounter);
+console.log("");
 
-console.log(advancedInfinityExponentiator("2", "64"));
-// console.log(advancedInfinitySubtractor("1", "1"));
+console.table(registers);

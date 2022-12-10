@@ -225,6 +225,129 @@ exports.execute = (l, bits, node, ast) => {
 
             inlay(l, bin.bin);
         }
+        else if (code == "add_v") {
+            inlay(l, "0000000000000101");
+
+            if (param.length != 3) {
+                console.log("Error: Invalid number of parameters for instruction: " + code);
+                console.log("-- Expected 3, got " + param.length)
+                process.exit(1);
+            }
+
+            if (!param[0].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[0]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[0] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            let withoutPrefix = param[0].replace(new RegExp("@", "g"), "");
+            let bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+
+            if (param[1].startsWith("0x")) {
+                const data = getDataHex(param[1]);
+                if (data.bits > bits) {
+                    console.log("Error: Invalid parameter for instruction: " + code);
+                    console.log("-- Expected " + bits + " bits, got " + data.bits);
+                    process.exit(1);
+                }
+
+                inlay(l, data.guard);
+            } else {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a hex value or a register");
+                process.exit(1);
+            }
+
+            if (!param[2].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[2]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[2] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            withoutPrefix = param[2].replace(new RegExp("@", "g"), "");
+            bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+        }
+        else if (code == "add_r") {
+            inlay(l, "0000000000000110");
+
+            if (param.length != 3) {
+                console.log("Error: Invalid number of parameters for instruction: " + code);
+                console.log("-- Expected 3, got " + param.length)
+                process.exit(1);
+            }
+
+            if (!param[0].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[0]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[0] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            let withoutPrefix = param[0].replace(new RegExp("@", "g"), "");
+            let bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+
+            if (!param[1].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[1]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[1] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            withoutPrefix = param[1].replace(new RegExp("@", "g"), "");
+            bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+
+            if (!param[2].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[2]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[2] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            withoutPrefix = param[2].replace(new RegExp("@", "g"), "");
+            bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+        }
         else {
             console.log("Error: Unsupported instruction: " + code);
             process.exit(1);
@@ -333,6 +456,174 @@ exports.execute = (l, bits, node, ast) => {
                 console.log("-- Expected a hex value or a register");
                 process.exit(1);
             }
+        }
+        else if (code == "move_r") {
+            inlay(l, "00000000000000000000000000000100");
+
+            if (param.length != 2) {
+                console.log("Error: Invalid number of parameters for instruction: " + code);
+                console.log("-- Expected 2, got " + param.length)
+                process.exit(1);
+            }
+
+            if (!param[0].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[0]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[0] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            let withoutPrefix = param[0].replace(new RegExp("@", "g"), "");
+            let bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+
+            if (!param[1].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[1]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[1] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            withoutPrefix = param[1].replace(new RegExp("@", "g"), "");
+            bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+        }
+        else if (code == "add_v") {
+            inlay(l, "00000000000000000000000000000101");
+
+            if (param.length != 3) {
+                console.log("Error: Invalid number of parameters for instruction: " + code);
+                console.log("-- Expected 3, got " + param.length)
+                process.exit(1);
+            }
+
+            if (!param[0].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[0]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[0] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            let withoutPrefix = param[0].replace(new RegExp("@", "g"), "");
+            let bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+
+            if (param[1].startsWith("0x")) {
+                const data = getDataHex(param[1]);
+                if (data.bits > bits) {
+                    console.log("Error: Invalid parameter for instruction: " + code);
+                    console.log("-- Expected " + bits + " bits, got " + data.bits);
+                    process.exit(1);
+                }
+
+                inlay(l, data.guard);
+            } else {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a hex value or a register");
+                process.exit(1);
+            }
+
+            if (!param[2].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[2]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[2] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            withoutPrefix = param[2].replace(new RegExp("@", "g"), "");
+            bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+        }
+        else if (code == "add_r") {
+            inlay(l, "00000000000000000000000000000110");
+
+            if (param.length != 3) {
+                console.log("Error: Invalid number of parameters for instruction: " + code);
+                console.log("-- Expected 3, got " + param.length)
+                process.exit(1);
+            }
+
+            if (!param[0].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[0]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[0] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            let withoutPrefix = param[0].replace(new RegExp("@", "g"), "");
+            let bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+
+            if (!param[1].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[1]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[1] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            withoutPrefix = param[1].replace(new RegExp("@", "g"), "");
+            bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
+
+            if (!param[2].startsWith("@")) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected a register, got " + param[2]);
+                process.exit(1);
+            }
+
+            // The bit size is the number in param[2] the actual register identifier is just a capital letter so a 16 bit A register is @16A
+            withoutPrefix = param[2].replace(new RegExp("@", "g"), "");
+            bin = registerToBin(withoutPrefix, bits);
+
+            if (bin.width > bits) {
+                console.log("Error: Invalid parameter for instruction: " + code);
+                console.log("-- Expected " + bits + " bits, got " + bin.width);
+                process.exit(1);
+            }
+
+            inlay(l, bin.bin);
         }
     }
     else {

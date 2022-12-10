@@ -10,6 +10,8 @@
  * @param {string} b
  */
 module.exports = function advancedInfinitySubtractor(a = "1", b = "1") {
+    a = a.toString();
+    b = b.toString();
     a = a.replace(/ /g, "").replace(/,/g, "");
     b = b.replace(/ /g, "").replace(/,/g, "");
 

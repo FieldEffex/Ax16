@@ -1,66 +1,11 @@
 bits 16
 
 _start:
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
-	noop
+	move_v @0, 0x05
+	move_v @1, 0x06
+	add_r @0, @1, @2
+	jump :clean
+clean:
+	move_v @0, 0x00
+	move_v @1, 0x00
 	halt

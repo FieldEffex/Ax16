@@ -18,8 +18,6 @@ module.exports = function advancedInfinityExponentiator(source = "1", expo = "1"
     while (expo != "0") {
         sum = advancedInfinityMultiplier(sum, source);
         expo = advancedInfinitySubtractor(expo, "1");
-
-        console.log(expo);
     }
 
     return sum;

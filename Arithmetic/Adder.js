@@ -12,6 +12,8 @@
 module.exports = function advancedInfinityAdder(a = "1", b = "1") {
     let cary = 0;
 
+    a = a.toString();
+    b = b.toString();
     a = a.replace(/ /g, "").replace(/,/g, "");
     b = b.replace(/ /g, "").replace(/,/g, "");
 
